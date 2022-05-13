@@ -1,0 +1,19 @@
+{
+  "name": "project-house-nodejs",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/Ljuniorm/project-house-nodejs.git",
+  "author": "Luiz Junior <luiz.junior@blueticket.com.br>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon ./src/server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.1",
+    "mongoose": "^6.3.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.16",
+    "sucrase": "^3.21.0"
+  }
+}
