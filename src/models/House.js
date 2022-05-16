@@ -1,15 +1,23 @@
-import { Schema, model } from "mongoose";
+import { Schema, model } from 'mongoose';
 
 const HouseSchema = new Schema({
-  thumbmail: String,
+  thumbnail: String,
   description: String,
   price: Number,
   location: String,
   status: Boolean,
-  user: {
+  user:{
     type: Schema.Types.ObjectId,
     ref: 'User'
   }
+}, {
+  toJSON: {
+    virtuals: true
+  }
+});
+
+HouseSchema.virtual('thumbnail_url').get(function(){
+  return `http://localhost:3333/files/${this.thumbnail}`
 })
 
-export default model('House', HouseSchema)
+export default model('House', HouseSchema);
