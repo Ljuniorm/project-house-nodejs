@@ -1,17 +1,27 @@
 import House from '../models/House'
 import User from '../models/User'
+import * as Yup from 'yup'
 class HouseController{
 
   async index (req, res) {
     const { status } = req.query
     let houses = await House.find({ status })
-    console.log('houses')
     return res.json(houses)
   }
 
   async store(req, res){
+    const schema = Yup.object().shape({
+      description: Yup.string().required(),
+      price: Yup.number().required(),
+      location: Yup.string().required(),
+      status: Yup.boolean().required(),
+    })
+
     const { user_id } = req.headers
     const { filename } = req.file
+
+    if (!(await schema.isValid(req.body))) return res.status(400).json({error: 'Falha na validação'})
+
     let houseRequest = { ...req.body, thumbnail: filename, user: user_id}
     let house = await House.create(houseRequest)
     return res.json(house)
