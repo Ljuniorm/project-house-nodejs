@@ -1,54 +1,56 @@
-import Reserve from "../models/Reserve";
-import User from "../models/User";
-import House from "../models/House";
+import Reserve from '../models/Reserve';
+import User from '../models/User';
+import House from '../models/House';
 
 class ReserveController {
-   async store (req, res) {
-      const { user_id } = req.headers
-      const { house_id } = req.params
-      const { date } = req.body
+    async store(req, res) {
+        const { user_id } = req.headers;
+        const { house_id } = req.params;
+        const { date } = req.body;
 
-      const house = await House.findById(house_id)
-      if (!house) {
-        return res.status(400).json({ error: 'Essa casa não existe.' })
-      }
+        const house = await House.findById(house_id);
+        if (!house) {
+            return res.status(400).json({ error: 'Essa casa não existe.' });
+        }
 
-      if (house.status !== false) {
-        return res.status(400).json({ error: 'Solicitação Indisponivel' })
-      }
-      
-      const user = await User.findById(user_id)
+        if (house.status !== false) {
+            return res.status(400).json({ error: 'Solicitação Indisponivel' });
+        }
 
-      if (String(user._id) === String(house.user)) {
-        return res.status(401).json({ error: 'Reserva não permitida' })
-      }
+        const user = await User.findById(user_id);
 
-      const reserve = await Reserve.create({
-        user: user_id,
-        house: house_id,
-        date
-      })
+        if (String(user._id) === String(house.user)) {
+            return res.status(401).json({ error: 'Reserva não permitida' });
+        }
 
-      await reserve.populate('house user');
+        const reserve = await Reserve.create({
+            user: user_id,
+            house: house_id,
+            date,
+        });
 
-      return res.json(reserve)
-   }
+        await reserve.populate('house user');
 
-   async destroy (req, res) {
-     const { reserve_id } = req.body
+        return res.json(reserve);
+    }
 
-     await Reserve.deleteOne({id: reserve_id})
- 
-     return res.json({message: "Removido com sucesso"})
-   }
+    async destroy(req, res) {
+        const { reserve_id } = req.body;
 
-   async index (req, res) {
-     const { user_id } = req.headers
+        await Reserve.deleteOne({ id: reserve_id });
 
-     let reserves = await Reserve.find({user: user_id}).populate('house')
+        return res.json({ message: 'Removido com sucesso' });
+    }
 
-     return res.json(reserves)
-   }
+    async index(req, res) {
+        const { user_id } = req.headers;
+
+        const reserves = await Reserve.find({ user: user_id }).populate(
+            'house'
+        );
+
+        return res.json(reserves);
+    }
 }
 
-export default new ReserveController()
+export default new ReserveController();
