@@ -9,7 +9,7 @@ class App {
         this.server = express();
 
         mongoose.connect(
-            'mongodb+srv://juniordev:juniordev@cluster0.mdm1k.mongodb.net/juniordev?retryWrites=true&w=majority',
+            'seudb',
             {
                 useNewUrlParser: true,
                 useUnifiedTopology: true,
